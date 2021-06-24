@@ -50,7 +50,10 @@ class Classifier_NNE:
     def fit(self, x_train, y_train, x_test, y_test, y_true):
         # no training since models are pre-trained
         start_time = time.time()
-
+        print(f"x_train.shape: {x_train.shape}")
+        print(f"y_train.shape: {y_train.shape}")
+        print(f"x_test.shape: {x_test.shape}")
+        print(f"y_test.shape: {y_test.shape}")
         y_pred = np.zeros(shape=y_test.shape)
 
         ll = 0
@@ -73,6 +76,7 @@ class Classifier_NNE:
                                                curr_dir, flags=self.flags, input_length=self.input_length, build=False)
 
                 predictions_file_name = curr_dir + 'y_pred.npy'
+                print(f"predictions_file_name: {predictions_file_name}")
                 # check if predictions already made
                 if check_if_file_exits(predictions_file_name):
                     # then load only the predictions from the file
@@ -85,7 +89,7 @@ class Classifier_NNE:
                     np.save(predictions_file_name, curr_y_pred)
 
                     keras.backend.clear_session()
-
+                print(f"shape: {curr_y_pred.shape}".center(30, '-'))
                 y_pred = y_pred + curr_y_pred
 
                 ll += 1

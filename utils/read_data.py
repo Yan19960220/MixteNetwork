@@ -71,20 +71,34 @@ def read_data(root_dir, data_name, normalization=True):
 
 def padding_zeros(data_in, num_pad):
     print(f"padding zeros".center(90, '*'))
-    a = np.zeros((num_pad, data_in.shape[1], 1))
+    print(f"Before: {data_in.shape}".center(50, '-'))
+    a_shape = (num_pad,) + data_in.shape[1:]
+    a = np.zeros(a_shape)
     print(a.shape)
-    b = np.append(data_in, a, 1)
+    b = np.append(data_in, a, 0)
+    print(f"End: {b.shape}".center(50, '-'))
     return b
 
 
 def load_data(data_root, name_data, batch_size):
     x_train, y_train, x_test, y_test, y_true, nb_classes, y_true_train = read_data(data_root, name_data)
 
-    num_padding = batch_size - (x_test.shape[0]) % batch_size
-    if num_padding < batch_size:
-        x_train = padding_zeros(x_train, num_padding)
-        x_test = padding_zeros(x_test, num_padding)
+    x_train, y_train, y_true_train = batch_filled(batch_size, x_train, y_train, y_true_train)
+    x_test, y_test, y_true = batch_filled(batch_size, x_test, y_test, y_true)
+
     return x_train, y_train, x_test, y_test, y_true, nb_classes, y_true_train
+
+
+def batch_filled(batch_size, data, label, one_hot):
+    num_padding = batch_size - (data.shape[0]) % batch_size
+    if num_padding < batch_size:
+        data = padding_zeros(data, num_padding)
+        label = padding_zeros(label, num_padding)
+        one_hot = padding_zeros(one_hot, num_padding)
+        # print(f"data: {data.shape}".center(30, '-'))
+        # print(f"label: {label.shape}".center(30, '-'))
+        # print(f"one hot: {one_hot.shape}".center(30, '*'))
+    return data, label, one_hot
 
 
 def shuffle_data(data, labels):

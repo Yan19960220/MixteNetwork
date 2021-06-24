@@ -104,8 +104,6 @@ if __name__ == '__main__':
     for dataset_name in dataset_names_for_archive[archive_name]:
         print('\t\t\tdataset_name: ', dataset_name)
 
-        # x_train, y_train, x_test, y_test, y_true, nb_classes, y_true_train, enc = prepare_data()
-
         output_directory = tmp_output_directory + dataset_name + '/'
 
         fit_classifier(classifier_name, dataset_name)

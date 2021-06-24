@@ -297,7 +297,7 @@ class Classifier_MIXTE:
         y_train = y_train.squeeze()
 
         print(f'begin fit'.center(80, '*'))
-        print(x_train.shape)
+        # print(x_train.shape)
         # if not tf.test.is_gpu_available():
         #     print('error no gpu')
         #     exit()
@@ -325,12 +325,12 @@ class Classifier_MIXTE:
 
         self.model.save(self.output_directory + 'last_model.hdf5')
 
-        print(f"predict the result".center(50, '-'))
+        # print(f"predict the result".center(50, '-'))
         y_pred = self.predict(x_val, y_true, x_train, y_train, y_val,
                               return_df_metrics=False)
 
         # save predictions
-        print(f"save predictions".center(50, '-'))
+        # print(f"save predictions".center(50, '-'))
         np.save(self.output_directory + 'y_pred.npy', y_pred)
 
         # convert the predicted from binary to integer
