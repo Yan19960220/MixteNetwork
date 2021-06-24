@@ -93,11 +93,31 @@ def padding_zeros(data_in, num_pad):
     return b
 
 
+def random_crop(data_in, num_crop):
+    print(f"random crop".center(90, '*'))
+    print(f"Before: {data_in.shape}".center(50, '-'))
+    for i in range(num_crop):
+        length = data_in.shape[0]
+        ele = np.random.randint(0, length-1)
+        data_in = np.delete(data_in, ele, 0)
+    print(f"End: {data_in.shape}".center(50, '-'))
+    return data_in
+
+
+def batch_crop(batch_size, data, label, one_hot):
+    num_crop = (data.shape[0]) % batch_size
+    if num_crop != 0:
+        data = random_crop(data, num_crop)
+        label = random_crop(label, num_crop)
+        one_hot = random_crop(one_hot, num_crop)
+    return data, label, one_hot
+
+
 def load_data(data_root, name_data, batch_size):
     x_train, y_train, x_test, y_test, y_true, nb_classes, y_true_train = read_data(data_root, name_data)
 
-    x_train, y_train, y_true_train = batch_filled(batch_size, x_train, y_train, y_true_train)
-    x_test, y_test, y_true = batch_filled(batch_size, x_test, y_test, y_true)
+    x_train, y_train, y_true_train = batch_crop(batch_size, x_train, y_train, y_true_train)
+    x_test, y_test, y_true = batch_crop(batch_size, x_test, y_test, y_true)
 
     return x_train, y_train, x_test, y_test, y_true, nb_classes, y_true_train
 
