@@ -12,6 +12,19 @@ def get_cls_dict(cls):
     return cls_dict
 
 
+def shuffle_data(data, labels):
+    """ Shuffle data and labels.
+        Input:
+          data: B,N,... numpy array
+          label: B,... numpy array
+        Return:
+          shuffled data, label and shuffle indices
+    """
+    idx = np.arange(len(labels))
+    np.random.shuffle(idx)
+    return data[idx, ...], labels[idx], idx
+
+
 def clean_cls(cls, cls_dict):
     """
     For some particular datasets, the labels are not continuous
@@ -100,15 +113,3 @@ def batch_filled(batch_size, data, label, one_hot):
         # print(f"one hot: {one_hot.shape}".center(30, '*'))
     return data, label, one_hot
 
-
-def shuffle_data(data, labels):
-    """ Shuffle data and labels.
-        Input:
-          data: B,N,... numpy array
-          label: B,... numpy array
-        Return:
-          shuffled data, label and shuffle indices
-    """
-    idx = np.arange(len(labels))
-    np.random.shuffle(idx)
-    return data[idx, ...], labels[idx], idx
